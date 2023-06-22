@@ -41,7 +41,7 @@ Citation
 
 If you use the SWIM package in your research, please cite the following `paper`_:
 
-.. [1] E. Bolager, I. Burak, C. Datar, Q. Sun, F. Dietrich. Sampling weights of deep neural networks. arXiV, 2023.
+.. [1] E\. Bolager, I. Burak, C. Datar, Q. Sun, F. Dietrich. Sampling weights of deep neural networks. arXiV, 2023.
 
 .. _paper: https://arxiv.org/abs/XXX.XXXX
 
