@@ -2,9 +2,9 @@
 SWIM: sample where it matters!
 ==============================
 
-``swimnetworks`` implements the algorithm SWIM (sample-where-it-matters) for sampling weights of neural networks.
+``swimnetworks`` implements the algorithm SWIM for sampling weights of neural networks.
 The algorithm provides a way to quickly train neural networks on a CPU.
-For more details on the theoretical background of the method, see [1]_.
+For more details on the theoretical background of the method, refer to our paper [1]_.
 
 Installation
 ------------
@@ -41,7 +41,7 @@ Citation
 
 If you use the SWIM package in your research, please cite the following `paper`_:
 
-.. [1] E\. Bolager, I. Burak, C. Datar, Q. Sun, F. Dietrich. Sampling weights of deep neural networks. arXiV, 2023.
+.. [1] E. Bolager, I. Burak, C. Datar, Q. Sun, F. Dietrich. Sampling weights of deep neural networks. arXiV, 2023.
 
 .. _paper: https://arxiv.org/abs/XXX.XXXX
 
