@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "swimnetworks"
+version = "0.0.1"
+authors = [
+  { name="Erik Bolager" },
+  { name="Iryna Burak" },
+  { name="Chinmay Datar" },
+  { name="Qing Sun" },
+  { name="Felix Dietrich", email="felix.dietrich@tum.de" }
+]
+description = "SWIM training of neural networks."
+readme = "README.rst"
+requires-python = ">=3.8"
+dynamic = ["dependencies"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://gitlab.com/felix.dietrich/swimnetworks"
+"Bug Tracker" = "https://gitlab.com/felix.dietrich/swimnetworks/-/issues"
+
+[tool.setuptools.packages.find]
+include = ["swimnetworks"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
