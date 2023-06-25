@@ -1,2 +1,3 @@
 build/
 swimnetworks.egg-info/
+*__pycache__*

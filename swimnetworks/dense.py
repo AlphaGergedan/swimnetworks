@@ -10,6 +10,7 @@ from .base import Base
 class Dense(Base):
     parameter_sampler: Union[Callable, str] = "relu"
     sample_uniformly: bool = False
+    prune_duplicates: bool = False
     random_seed: int = 1
     dist_min: np.float64 = 1e-10
     repetition_scaler: int = 1
@@ -19,6 +20,7 @@ class Dense(Base):
 
     def __post_init__(self):
         super().__post_init__()
+        self.n_pruned_neurons = 0
         
         if not isinstance(self.parameter_sampler, Callable):
             if self.parameter_sampler == "relu":
@@ -103,6 +105,12 @@ class Dense(Base):
                                   size=self.layer_width,
                                   replace=True,
                                   p=probabilities)
+        
+        if self.prune_duplicates:
+            selected_idx = np.unique(selected_idx)
+            self.n_pruned_neurons = self.layer_width - len(selected_idx)
+            self.layer_width = len(selected_idx)
+
         directions = directions[selected_idx]
         dists = dists[selected_idx]
         idx_from = candidates_idx_from[selected_idx]
