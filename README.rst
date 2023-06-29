@@ -9,7 +9,7 @@ For more details on the theoretical background of the method, refer to our paper
 Installation
 ------------
 
-To install the main package with the requirements, one needs to clone the repository and execute the follwoing command from the root folder:
+To install the main package with the requirements, one needs to clone the repository and execute the following command from the root folder:
 
 .. code-block:: bash
 
@@ -26,7 +26,7 @@ Here is a small example of defining a sampled network:
     from swimnetworks import Dense, Linear
 
     steps = [
-        (f"dense", Dense(layer_width=512, activation="tanh",
+        ("dense", Dense(layer_width=512, activation="tanh",
                          parameter_sampler="tanh",
                          random_seed=42)),
         ("linear", Linear(regularization_scale=1e-10))
