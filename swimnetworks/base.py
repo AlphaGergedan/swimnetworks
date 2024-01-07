@@ -52,7 +52,7 @@ class Base(BaseEstimator, ABC):
     def transform(self, x, y=None):
         if self.layer_width is None:
             raise ValueError("The fit method did not set the number of outputs, i.e. layer_width.")
-        
+
         x = self.prepare_x(x)
         result = self.activation(x @ self.weights + self.biases)
         return result
@@ -63,12 +63,12 @@ class Base(BaseEstimator, ABC):
 
     def predict(self, x):
         return self.transform(x)
-    
+
     def prepare_x(self, x):
         if len(x.shape) > 2:
             x = x.reshape(x.shape[0], -1)
         return x
-    
+
     def prepare_y(self, y):
         """Prepares labels for the sampling.
 
@@ -79,13 +79,13 @@ class Base(BaseEstimator, ABC):
             y = y.reshape(-1, 1)
 
         if not self.is_classifier:
-            return y, y 
-        
-        self._classes = np.unique(y)  
+            return y, y
+
+        self._classes = np.unique(y)
         n_classes = len(self._classes)
         y_encoded_index = np.argmax(y == self._classes, axis=1)
         y_encoded_onehot = np.eye(n_classes)[y_encoded_index]
-        return y_encoded_onehot, y_encoded_index.reshape(-1, 1)  
+        return y_encoded_onehot, y_encoded_index.reshape(-1, 1)
 
 
     def prepare_y_inverse(self, y):
@@ -95,13 +95,14 @@ class Base(BaseEstimator, ABC):
         For the regression problem, has no effect on the labels.
         """
         if not self.is_classifier:
-            return y 
-        
+            return y
+
         probability_max = np.argmax(y, axis=1)
         predictions = self._classes[probability_max].reshape(-1, 1)
         return predictions
-    
-    def clean_inputs(self, x, y):
+
+    def clean_inputs(self, x, y=None):
         x = self.prepare_x(x)
-        y, _ = self.prepare_y(y)
+        if not y is None:
+            y, _ = self.prepare_y(y)
         return x, y
