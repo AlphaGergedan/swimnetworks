@@ -69,7 +69,7 @@ class Dense(Base):
 
     def sample_parameters_randomly(self, x, _, rng):
         weights = rng.normal(loc=0, scale=1, size=(self.layer_width, x.shape[1])).T
-        biases = rng.uniform(low=-1, high=1, size=(self.layer_width, 1)).T
+        biases = rng.uniform(low=-6, high=6, size=(self.layer_width, 1)).T
         idx0 = None
         idx1 = None
         return weights, biases, idx0, idx1
@@ -96,11 +96,13 @@ class Dense(Base):
         directions = directions / dists
 
         if y is None:
+            print(f"inside hidden layer param sampler: y is none")
             # data point sampler must be uniformly distributed since no function value information is given,
             # we cannot compute function differences
             assert self.sample_uniformly
             dy = None
         else:
+            print(f"inside hidden layer param sampler: y is given")
             dy = y[candidates_idx_to, :] - y[candidates_idx_from, :]
             if self.is_classifier:
                 dy[np.abs(dy) > 0] = 1
