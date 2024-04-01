@@ -18,6 +18,9 @@ class Dense(Base):
     idx_from: np.ndarray = None
     idx_to: np.ndarray = None
 
+    elm_bias_start: float = -1
+    elm_bias_end: float = 1
+
     def __post_init__(self):
         super().__post_init__()
         self.n_pruned_neurons = 0
@@ -69,7 +72,7 @@ class Dense(Base):
 
     def sample_parameters_randomly(self, x, _, rng):
         weights = rng.normal(loc=0, scale=1, size=(self.layer_width, x.shape[1])).T
-        biases = rng.uniform(low=-6, high=6, size=(self.layer_width, 1)).T
+        biases = rng.uniform(low=self.elm_bias_start, high=self.elm_bias_end, size=(self.layer_width, 1)).T
         idx0 = None
         idx1 = None
         return weights, biases, idx0, idx1
