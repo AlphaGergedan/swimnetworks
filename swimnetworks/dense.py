@@ -11,6 +11,7 @@ class Dense(Base):
     parameter_sampler: Union[Callable, str] = "relu"
     sample_uniformly: bool = False
     prune_duplicates: bool = False
+    resample_duplicates: bool = False
     random_seed: int = 1
     dist_min: np.float64 = 1e-10
     repetition_scaler: int = 1
@@ -112,15 +113,21 @@ class Dense(Base):
 
         # We always sample with replacement to avoid forcing to sample low densities
         probabilities = self.weight_probabilities(dists, dy)
-        selected_idx = rng.choice(dists.shape[0],
-                                  size=self.layer_width,
-                                  replace=True,
-                                  p=probabilities)
+        selected_idx = rng.choice(dists.shape[0], size=self.layer_width, replace=True, p=probabilities)
 
         if self.prune_duplicates:
             selected_idx = np.unique(selected_idx)
             self.n_pruned_neurons = self.layer_width - len(selected_idx)
             self.layer_width = len(selected_idx)
+
+        if self.resample_duplicates:
+            # sample till we get distinct pairs
+            while len(np.unique(selected_idx)) != self.layer_width :
+                n_duplicates = self.layer_width - len(np.unique(selected_idx))
+                candidate_idx = rng.choice(dists.shape[0], size=n_duplicates, replace=True, p=probabilities)
+                # all elements in arr1 that are not in arr2
+                candidate_idx = np.setdiff1d(candidate_idx, selected_idx, assume_unique=True)
+                selected_idx = np.concatenate((selected_idx, candidate_idx))
 
         directions = directions[selected_idx]
         dists = dists[selected_idx]
