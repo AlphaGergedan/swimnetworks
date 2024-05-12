@@ -2,6 +2,8 @@
 SWIM: sample where it matters!
 ==============================
 
+Note: this is a fork, the original repo can be found [here](https://gitlab.com/felix.dietrich/swimnetworks).
+
 ``swimnetworks`` implements the algorithm SWIM for sampling weights of neural networks.
 The algorithm provides a way to quickly train neural networks on a CPU.
 For more details on the theoretical background of the method, refer to our paper [1]_.
