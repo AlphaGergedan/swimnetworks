@@ -100,13 +100,9 @@ class Dense(Base):
         directions = directions / dists
 
         if y is None:
-            print(f"inside hidden layer param sampler: y is none")
-            # data point sampler must be uniformly distributed since no function value information is given,
-            # we cannot compute function differences
             assert self.sample_uniformly
             dy = None
         else:
-            print(f"inside hidden layer param sampler: y is given")
             dy = y[candidates_idx_to, :] - y[candidates_idx_from, :]
             if self.is_classifier:
                 dy[np.abs(dy) > 0] = 1
