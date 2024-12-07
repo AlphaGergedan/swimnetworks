@@ -100,13 +100,9 @@ class Dense(Base):
         directions = directions / dists
 
         if y is None:
-            print(f"inside hidden layer param sampler: y is none")
-            # data point sampler must be uniformly distributed since no function value information is given,
-            # we cannot compute function differences
             assert self.sample_uniformly
             dy = None
         else:
-            print(f"inside hidden layer param sampler: y is given")
             dy = y[candidates_idx_to, :] - y[candidates_idx_from, :]
             if self.is_classifier:
                 dy[np.abs(dy) > 0] = 1
@@ -127,7 +123,7 @@ class Dense(Base):
                 candidate_idx = rng.choice(dists.shape[0], size=n_duplicates, replace=True, p=probabilities)
                 # all elements in arr1 that are not in arr2
                 candidate_idx = np.setdiff1d(candidate_idx, selected_idx, assume_unique=True)
-                selected_idx = np.concatenate((selected_idx, candidate_idx))
+                selected_idx = np.concatenate((np.unique(selected_idx), candidate_idx))
 
         directions = directions[selected_idx]
         dists = dists[selected_idx]
