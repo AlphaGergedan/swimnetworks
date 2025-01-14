@@ -2,7 +2,7 @@ from __future__ import annotations, division
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Callable, Tuple, Union
+from typing import Callable, Tuple, Union, Type
 import numpy as np
 from sklearn.base import BaseEstimator
 
@@ -16,6 +16,7 @@ class Base(BaseEstimator, ABC):
     weights: np.ndarray = None
     biases: np.ndarray = None
     n_parameters: int = 0
+    dtype: Union[Type[np.float32], Type[np.float64]] = np.float64
 
     input_shape: Tuple[int, ...] = None
     output_shape: Tuple[int, ...] = None

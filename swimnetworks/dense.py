@@ -47,8 +47,8 @@ class Dense(Base):
 
         self.idx_from = idx_from
         self.idx_to = idx_to
-        self.weights = weights
-        self.biases = biases
+        self.weights = weights.astype(self.dtype)
+        self.biases = biases.astype(self.dtype)
 
         self.n_parameters = np.prod(weights.shape) + np.prod(biases.shape)
         return self

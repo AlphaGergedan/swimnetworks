@@ -17,7 +17,8 @@ class Linear(Base):
 
         x, y = self.clean_inputs(x, y)
         # prepare to fit the bias as well
-        x = np.column_stack([x, np.ones((x.shape[0], 1))])
+        x = np.column_stack([x, np.ones((x.shape[0], 1))]).astype(self.dtype)
+        y = y.astype(self.dtype)
 
         self.weights = np.linalg.lstsq(x, y, rcond=self.regularization_scale)[0]
 
