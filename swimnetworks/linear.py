@@ -10,6 +10,28 @@ from .base import Base
 @dataclass
 class Linear(Base):
     regularization_scale: float = 1e-8
+    random_seed: int = -1
+    low: float = -np.pi
+    high: float = np.pi
+
+    def init_layer(self, dense_layer_width: int):
+        """
+        Randomly sample layer using normal dist.
+        """
+        rng = np.random.default_rng(self.random_seed)
+        weights, biases = self.sample_parameters_randomly(rng, dense_layer_width)
+
+        self.weights = weights.astype(self.dtype)
+        self.biases = biases.astype(self.dtype)
+
+        self.n_parameters = np.prod(weights.shape) + np.prod(biases.shape)
+        return self
+
+    def sample_parameters_randomly(self, rng, dense_layer_width):
+        print(f"-> sampling weights with size={self.layer_width},{dense_layer_width}")
+        weights = rng.normal(loc=0, scale=1, size=(self.layer_width, dense_layer_width)).T
+        biases = rng.uniform(low=self.low, high=self.high, size=(self.layer_width)).T
+        return weights, biases
 
     def fit(self, x, y=None):
         if y is None:
