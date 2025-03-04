@@ -15,6 +15,7 @@ class Dense(Base):
     random_seed: int = 1
     dist_min: np.float64 = 1e-10
     repetition_scaler: int = 1
+    activ_str: str = ""
 
     idx_from: np.ndarray = None
     idx_to: np.ndarray = None
