@@ -55,3 +55,16 @@ class Linear(Base):
         y_predict = super().transform(x, y)
         y_predict = self.prepare_y_inverse(y_predict)
         return y_predict
+
+    def backward(self, d_output) -> np.ndarray:
+        """
+        Compute gradient of linear layer output with respect to input x.
+
+        Args:
+            x (np.ndarray): Input array of shape (n_points, d_input)
+            d_output (float or np.ndarray): Upstream gradient (dL/dy), shape (n_points, 1)
+        Returns:
+            np.ndarray: Gradient dL/dx, same shape as x
+        """
+        # Gradient output w.r.t. input is weights.T
+        return d_output @ self.weights.T

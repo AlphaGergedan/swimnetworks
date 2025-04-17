@@ -5,6 +5,7 @@ from typing import Callable, Union
 import numpy as np
 
 from .base import Base
+from src.activ import parse_activ_df, parse_activ_f
 
 @dataclass
 class Dense(Base):
@@ -91,7 +92,7 @@ class Dense(Base):
         # This guarantees that:
         # (a) we draw from all the N(N-1)/2 - N possible pairs (minus the exact idx_from=idx_to case)
         # (b) no indices appear twice at the same position (never idx0[k]==idx1[k] for all k)
-        candidates_idx_from = rng.integers(low=0, high=x.shape[0], size=x.shape[0]*n_repetitions)
+        candidates_idx_from = rng.integers(low=0, high=x.shape[0], size=x.shape[0] * n_repetitions)
         delta = rng.integers(low=1, high=x.shape[0]-1, size=candidates_idx_from.shape[0])
         candidates_idx_to = (candidates_idx_from + delta) % x.shape[0]
 
@@ -104,6 +105,7 @@ class Dense(Base):
             assert self.sample_uniformly
             dy = None
         else:
+            assert not self.sample_uniformly
             dy = y[candidates_idx_to, :] - y[candidates_idx_from, :]
             if self.is_classifier:
                 dy[np.abs(dy) > 0] = 1
@@ -133,7 +135,6 @@ class Dense(Base):
 
         return directions, dists, idx_from, idx_to
 
-
     def weight_probabilities(self, dists, dy=None):
         """Compute probability that a certain weight should be chosen as part of the network.
         This method computes all probabilities at once, without removing the new weights one by one.
@@ -149,7 +150,7 @@ class Dense(Base):
         if self.sample_uniformly:
             probabilities = np.ones(dists.shape[0]) / len(dists)
         else:
-            if not dy is None:
+            if dy is not None:
                 # compute the maximum over all changes in all y directions to sample good gradients for all outputs
                 gradients = (np.max(np.abs(dy), axis=1, keepdims=True) / dists).ravel()
                 if np.sum(gradients) < self.dist_min:
@@ -161,3 +162,17 @@ class Dense(Base):
                 raise ValueError("Cannot compute gradients without function values.")
 
         return probabilities
+
+    def backward(self, x, d_output):
+        """
+        Args:
+            apply_linear        If True then returns the network's gradient w.r.t. given input
+                                If False then returns dense layer's output's gradient w.r.t. input.
+                                (useful for fitting last layer weights)
+        """
+        self.activation = parse_activ_df(self.activ_str, order=1)
+        grad = self.transform(x)
+        self.activation = parse_activ_f(self.activ_str)
+        # grad = np.einsum("ij,kj->ikj", grad, self.weights)
+        grad = (d_output * grad) @ self.weights.T
+        return grad
