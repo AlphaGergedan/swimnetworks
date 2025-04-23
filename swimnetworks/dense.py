@@ -5,7 +5,7 @@ from typing import Callable, Union
 import numpy as np
 
 from .base import Base
-from src.activ import parse_activ_df, parse_activ_f
+from src.utils import parse_activ_df, parse_activ_f
 
 @dataclass
 class Dense(Base):
